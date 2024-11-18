@@ -55,7 +55,7 @@ return {
 		hints = { enabled = true },
 		windows = {
 			---@type "right" | "left" | "top" | "bottom"
-			position = "right", -- the position of the sidebar
+			position = "left", -- the position of the sidebar
 			wrap = true, -- similar to vim.o.wrap
 			width = 30, -- default % based on available width
 			sidebar_header = {
