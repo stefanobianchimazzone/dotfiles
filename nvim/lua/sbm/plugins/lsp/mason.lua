@@ -44,7 +44,9 @@ return {
 				"isort", -- python formatter
 				"black", -- python formatter
 				"pylint",
-				"eslint_d",
+				"eslint_d", -- javascript/typescript linter
+				"eslint", -- required for eslint_d
+				"typescript-language-server", -- required for typescript support
 				"pyright",
 			},
 		})
