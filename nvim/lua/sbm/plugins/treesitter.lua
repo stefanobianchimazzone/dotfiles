@@ -9,7 +9,7 @@ return {
 			opts = {
 				enable = true,
 				mode = "topline",
-				line_numbers = false,
+				line_numbers = true,
 			},
 		},
 	},
