@@ -11,7 +11,6 @@ keymap.set("n", "<C-k>", ":m .-2<CR>==", { desc = "Move line up" })
 keymap.set("v", "<C-j>", ":m '>+1<CR>gv=gv", { desc = "Move block down" })
 keymap.set("v", "<C-k>", ":m '<-2<CR>gv=gv", { desc = "Move block up" })
 
--- Clear search results
 keymap.set("n", "<leader>nh", ":nohl<CR>", { desc = "Clear search highlights" })
 
 -- increment/decrement numbers
@@ -24,7 +23,6 @@ keymap.set("n", "<leader>sh", "<C-w>s", { desc = "Split window horizontally" })
 keymap.set("n", "<leader>se", "<C-w>=", { desc = "Make splits equal in size" })
 keymap.set("n", "<leader>sx", "<cmd>close<CR>", { desc = "Close current plit" })
 
--- Tabs management
 keymap.set("n", "<leader>to", "<cmd>tabnew<CR>", { desc = "Open new tab" })
 keymap.set("n", "<leader>tx", "<cmd>tabclose<CR>", { desc = "Close current tab" })
 keymap.set("n", "<leader>tn", "<cmd>tabn<CR>", { desc = "Move to next tab" })
