@@ -2,8 +2,8 @@ return {
 	"linux-cultist/venv-selector.nvim",
 	dependencies = {
 		-- "neovim/nvim-lspconfig", -- Comment out if managed by mason
-		"mfussenegger/nvim-dap",
-		"mfussenegger/nvim-dap-python", --optional
+		--"mfussenegger/nvim-dap",
+		--"mfussenegger/nvim-dap-python", --optional
 		{ "nvim-telescope/telescope.nvim", branch = "0.1.x", dependencies = { "nvim-lua/plenary.nvim" } },
 	},
 	lazy = false,
@@ -12,6 +12,6 @@ return {
 		require("venv-selector").setup()
 	end,
 	keys = {
-		{ ",v", "<cmd>VenvSelect<cr>" },
+		{ "<leader>ve", "<cmd>VenvSelect<cr>", desc = "Select Python virtual env" },
 	},
 }
