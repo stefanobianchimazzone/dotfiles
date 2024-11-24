@@ -48,6 +48,7 @@ return {
 				"eslint", -- required for eslint_d
 				"typescript-language-server", -- required for typescript support
 				"pyright",
+				"lua_ls",
 			},
 		})
 	end,
