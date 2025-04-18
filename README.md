@@ -44,13 +44,21 @@ Install Atuin:
 curl --proto '=https' --tlsv1.2 -LsSf https://setup.atuin.sh | sh
 ```
 
+Install Zellij:
+
+```sh
+$ brew install zellij
+```
+
 Copy the config files from this repo into the proper directories:
 
 ```sh
 # Ghostty config files
 $ cp -r ghostty ~/.config/
-# Neoovim config files
+# Neovim config files
 $ cp -r nvim ~/.config/
 # Atuin config files
 $ cp -r atuin ~/config/
+# Zellij config files
+$ cp -r zellij ~/config/
 ```
