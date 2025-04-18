@@ -1,0 +1,19 @@
+theme = tokyonight
+background = #000000
+font-family = MesloLGM Nerd Font Mono
+cursor-style = block
+cursor-style-blink = true
+shell-integration-features = no-cursor 
+
+background-opacity = 0.70
+background-blur-radius = 25
+macos-titlebar-style = hidden
+window-decoration = true
+window-padding-x = 10
+window-padding-y = 10
+window-padding-balance = true
+
+auto-update = check
+
+# Custom Keybinds
+keybind = global:ctrl+escape=toggle_quick_terminal

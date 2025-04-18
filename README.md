@@ -44,8 +44,13 @@ Install Atuin:
 curl --proto '=https' --tlsv1.2 -LsSf https://setup.atuin.sh | sh
 ```
 
-Copy the Neovim config files from this repo into the proper directory:
+Copy the config files from this repo into the proper directories:
 
 ```sh
-$ cp -r nvim ~/.config
+# Ghostty config files
+$ cp -r ghostty ~/.config/
+# Neoovim config files
+$ cp -r nvim ~/.config/
+# Atuin config files
+$ cp -r atuin ~/config/
 ```
