@@ -14,6 +14,12 @@ Install fonts:
 $ brew install font-meslo-lg-nerd-font
 ```
 
+Install Ghostty:
+
+```sh
+brew install --cask ghostty
+```
+
 Install Neovim:
 
 ```sh
@@ -30,6 +36,12 @@ Install Node:
 
 ```sh
 $ brew install node
+```
+
+Install Atuin:
+
+```sh
+curl --proto '=https' --tlsv1.2 -LsSf https://setup.atuin.sh | sh
 ```
 
 Copy the Neovim config files from this repo into the proper directory:
