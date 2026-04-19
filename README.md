@@ -50,6 +50,18 @@ Install Zellij:
 $ brew install zellij
 ```
 
+Install tmux:
+
+```sh
+$ brew install tmux
+```
+
+Install [TPM](https://github.com/tmux-plugins/tpm) (tmux plugin manager):
+
+```sh
+$ git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+```
+
 Copy the config files from this repo into the proper directories:
 
 ```sh
@@ -61,4 +73,6 @@ $ cp -r nvim ~/.config/
 $ cp -r atuin ~/config/
 # Zellij config files
 $ cp -r zellij ~/config/
+# tmux config file
+$ cp tmux/tmux.conf ~/.tmux.conf
 ```
