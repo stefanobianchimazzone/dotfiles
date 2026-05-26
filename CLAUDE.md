@@ -14,7 +14,7 @@ cp -r ghostty ~/.config/
 cp -r nvim ~/.config/
 cp -r atuin ~/.config/
 cp -r zellij ~/.config/
-cp tmux/tmux.conf ~/.tmux.conf
+cp -r tmux ~/.config/
 ```
 
 Prerequisites are installed via Homebrew (see README.md for full list).
@@ -36,7 +36,7 @@ Single config file. Uses Tokyo Night theme, MesloLGM Nerd Font Mono, translucent
 KDL format. Keybinds use `clear-defaults=true` with custom bindings. Default mode is `locked` (unlock with Ctrl+g). Tokyo Night Storm theme.
 
 ### tmux (`tmux/tmux.conf`)
-Prefix key is `Ctrl+s`. Uses TPM for plugin management. Catppuccin Macchiato theme. Vi copy-mode bindings. Installed to `~/.tmux.conf` (not `~/.config/`).
+Prefix key is `Ctrl+s`. Uses TPM for plugin management. Catppuccin Macchiato theme. Vi copy-mode bindings. Installed to `~/.config/tmux/tmux.conf`.
 
 ### Atuin (`atuin/config.toml`)
 TOML format. Mostly defaults with `update_check = false`, `enter_accept = true`, sync v2 records enabled.
