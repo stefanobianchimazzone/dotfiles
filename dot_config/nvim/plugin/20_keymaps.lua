@@ -43,7 +43,13 @@ map('n', '<leader>fk', builtin('keymaps'), { desc = 'Find keymaps' })
 map('n', '<leader>fm', builtin('commands'), { desc = 'Find commands' })
 map('n', '<leader>fd', builtin('diagnostics', { bufnr = 0 }), { desc = 'Find diagnostics (buffer)' })
 map('n', '<leader>fD', builtin('diagnostics'), { desc = 'Find diagnostics (all)' })
+map('n', '<leader>fy', builtin('registers'), { desc = 'Find registers' })
 map('n', '<leader>ft', '<Cmd>TodoTelescope<CR>', { desc = 'Find TODOs' })
+
+-- #### LSP symbols (Telescope) ####
+
+map('n', '<leader>ls', builtin('lsp_document_symbols'), { desc = 'Document symbols' })
+map('n', '<leader>lw', builtin('lsp_dynamic_workspace_symbols'), { desc = 'Workspace symbols' })
 
 -- #### LSP (set via LspAttach) ####
 
@@ -64,6 +70,11 @@ Config.new_autocmd('LspAttach', '*', function(ev)
   lmap('n', '<leader>rn', vim.lsp.buf.rename, 'Rename symbol')
   lmap('n', '<leader>D', function() tb.diagnostics({ bufnr = 0 }) end, 'Buffer diagnostics')
   lmap('n', '<leader>d', vim.diagnostic.open_float, 'Line diagnostics')
+
+  lmap('n', '<leader>rs', function()
+    vim.lsp.stop_client(vim.lsp.get_clients({ bufnr = buf }))
+    vim.defer_fn(function() vim.cmd('edit') end, 500)
+  end, 'Restart LSP')
 end, 'LSP keybindings')
 
 -- #### Git ####
@@ -101,8 +112,9 @@ Config.leader_group_clues = {
   { mode = 'n', keys = '<Leader>e', desc = '+Explore' },
   { mode = 'n', keys = '<Leader>f', desc = '+Find' },
   { mode = 'n', keys = '<Leader>g', desc = '+Git' },
-  { mode = 'n', keys = '<Leader>l', desc = '+Lazygit' },
+  { mode = 'n', keys = '<Leader>l', desc = '+Lint/Symbols' },
   { mode = 'n', keys = '<Leader>m', desc = '+Format' },
+  { mode = 'n', keys = '<Leader>o', desc = '+Obsidian' },
   { mode = 'n', keys = '<Leader>n', desc = '+Notifications' },
   { mode = 'n', keys = '<Leader>r', desc = '+Rename' },
   { mode = 'n', keys = '<Leader>s', desc = '+Split' },

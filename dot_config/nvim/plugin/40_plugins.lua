@@ -21,7 +21,18 @@ now_if_args(function()
   if #to_install > 0 then require('nvim-treesitter').install(to_install) end
 
   local filetypes = vim.iter(ensure_languages):map(vim.treesitter.language.get_filetypes):flatten():totable()
-  Config.new_autocmd('FileType', filetypes, function(ev) vim.treesitter.start(ev.buf) end, 'Enable treesitter')
+  Config.new_autocmd('FileType', filetypes, function(ev)
+    vim.treesitter.start(ev.buf)
+
+    vim.wo.foldmethod = 'expr'
+    vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+    vim.wo.foldlevel = 99
+
+    local ft = vim.bo[ev.buf].filetype
+    if not vim.tbl_contains({ 'python', 'yaml', 'markdown' }, ft) then
+      vim.bo[ev.buf].indentexpr = "v:lua.require('nvim-treesitter').indentexpr()"
+    end
+  end, 'Enable treesitter with folding and indentation')
 
   -- Incremental selection
   require('nvim-treesitter.configs').setup({
@@ -61,6 +72,7 @@ later(function()
           ['<C-j>'] = actions.move_selection_next,
           ['<C-e>'] = actions.preview_scrolling_down,
           ['<C-y>'] = actions.preview_scrolling_up,
+          ['<C-q>'] = actions.send_selected_to_qflist + actions.open_qflist,
         },
       },
     },
@@ -81,11 +93,12 @@ end)
 -- Formatting =================================================================
 later(function()
   add({ 'https://github.com/stevearc/conform.nvim' })
+  local vault_path = vim.fn.expand('~/.brain-vault')
   require('conform').setup({
     default_format_opts = { lsp_format = 'fallback' },
     formatters_by_ft = {
       c = { 'clang-format' },
-      go = { 'gofmt' },
+      go = { 'goimports' },
       json = { 'prettier' },
       lua = { 'stylua' },
       markdown = { 'prettier' },
@@ -93,6 +106,26 @@ later(function()
       rust = { 'rustfmt' },
       yaml = { 'prettier' },
     },
+    format_on_save = function(bufnr)
+      local path = vim.api.nvim_buf_get_name(bufnr)
+      if path:find(vault_path, 1, true) then
+        return false
+      end
+      return { lsp_fallback = true, async = false, timeout_ms = 3000 }
+    end,
+  })
+end)
+
+-- Linting ====================================================================
+later(function()
+  add({ 'https://github.com/mfussenegger/nvim-lint' })
+end)
+
+-- Obsidian ===================================================================
+later(function()
+  add({
+    'https://github.com/obsidian-nvim/obsidian.nvim',
+    'https://github.com/nvim-lua/plenary.nvim',
   })
 end)
 
