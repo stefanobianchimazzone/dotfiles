@@ -18,11 +18,198 @@ end)
 
 now(function() require('mini.notify').setup() end)
 
-now(function() require('mini.starter').setup() end)
+now(function()
+  local starter = require('mini.starter')
+  starter.setup({
+    items = {
+      starter.sections.recent_files(5, false),
+      starter.sections.recent_files(5, true),
+      starter.sections.builtin_actions(),
+    },
+  })
+end)
 
-now(function() require('mini.statusline').setup() end)
+now(function()
+  local statusline = require('mini.statusline')
 
-now(function() require('mini.tabline').setup() end)
+  vim.opt.ruler = false
+
+  local SLANT_RIGHT = '\u{1fb66}'
+  local SLANT_LEFT = '\u{1fb5b}'
+
+  local edge_groups = {
+    'MiniStatuslineModeNormal',
+    'MiniStatuslineModeInsert',
+    'MiniStatuslineModeVisual',
+    'MiniStatuslineModeReplace',
+    'MiniStatuslineModeCommand',
+    'MiniStatuslineModeOther',
+    'MiniStatuslineDevinfo',
+    'MiniStatuslineDiagnostics',
+    'MiniStatuslineFileinfo',
+  }
+
+  local function rebuild_edge_hls()
+    local base_bg = (vim.api.nvim_get_hl(0, { name = 'MiniStatuslineFilename', link = false })).bg
+    for _, name in ipairs(edge_groups) do
+      local seg_bg = (vim.api.nvim_get_hl(0, { name = name, link = false })).bg
+      vim.api.nvim_set_hl(0, name .. '_Edge', { fg = base_bg, bg = seg_bg })
+      vim.api.nvim_set_hl(0, name .. '_EdgeR', { fg = seg_bg, bg = base_bg })
+    end
+  end
+
+  local function ensure_diagnostics_hl()
+    local diag = vim.api.nvim_get_hl(0, { name = 'MiniStatuslineDiagnostics', link = false })
+    if not diag.bg then
+      local devinfo = vim.api.nvim_get_hl(0, { name = 'MiniStatuslineDevinfo', link = false })
+      vim.api.nvim_set_hl(0, 'MiniStatuslineDiagnostics', { bg = devinfo.bg, fg = devinfo.fg })
+    end
+  end
+
+  vim.api.nvim_create_autocmd('ColorScheme', {
+    callback = function()
+      ensure_diagnostics_hl()
+      rebuild_edge_hls()
+    end,
+  })
+  ensure_diagnostics_hl()
+  rebuild_edge_hls()
+
+  local function section_venv()
+    local venv = vim.env.VIRTUAL_ENV
+    if not venv then return '' end
+    return '  ' .. vim.fn.fnamemodify(venv, ':t')
+  end
+
+  local function section_progress()
+    local cur = vim.fn.line('.')
+    local total = vim.fn.line('$')
+    if cur == 1 then return 'Top' end
+    if cur == total then return 'Bot' end
+    return math.floor(cur / total * 100) .. '%%'
+  end
+
+  statusline.setup({
+    use_icons = true,
+    content = {
+      active = function()
+        local mode, mode_hl = statusline.section_mode({ trunc_width = 120 })
+        local git = statusline.section_git({ trunc_width = 40 })
+        local diff = statusline.section_diff({ trunc_width = 75 })
+        local diagnostics = statusline.section_diagnostics({ trunc_width = 75 })
+        local filename = statusline.section_filename({ trunc_width = 140 })
+        local filetype = vim.bo.filetype
+        local venv = section_venv()
+        local progress = section_progress()
+
+        local devinfo = table.concat(vim.tbl_filter(function(s) return s ~= '' end, { git, diff }), ' ')
+
+        local mode_edge = mode_hl .. '_Edge'
+        local devinfo_edge = 'MiniStatuslineDevinfo_Edge'
+        local diag_edge = 'MiniStatuslineDiagnostics_Edge'
+        local fileinfo_edge = 'MiniStatuslineFileinfo_Edge'
+
+        local parts = {}
+        local R = SLANT_RIGHT
+        local L = SLANT_LEFT
+
+        parts[#parts + 1] = '%#' .. mode_hl .. '# ' .. mode .. ' '
+        parts[#parts + 1] = '%#' .. mode_edge .. '#' .. R
+
+        if devinfo ~= '' then
+          parts[#parts + 1] = '%#' .. devinfo_edge .. 'R#' .. R
+          parts[#parts + 1] = '%#MiniStatuslineDevinfo# ' .. devinfo .. ' '
+          parts[#parts + 1] = '%#' .. devinfo_edge .. '#' .. R
+        end
+
+        if diagnostics ~= '' then
+          parts[#parts + 1] = '%#' .. diag_edge .. 'R#' .. R
+          parts[#parts + 1] = '%#MiniStatuslineDiagnostics# ' .. diagnostics .. ' '
+          parts[#parts + 1] = '%#' .. diag_edge .. '#' .. R
+        end
+
+        parts[#parts + 1] = '%#MiniStatuslineFilename# ' .. filename .. ' '
+        parts[#parts + 1] = '%<%='
+
+        if venv ~= '' then
+          parts[#parts + 1] = '%#' .. devinfo_edge .. '#' .. L
+          parts[#parts + 1] = '%#MiniStatuslineDevinfo#' .. venv .. ' '
+          parts[#parts + 1] = '%#' .. devinfo_edge .. 'R#' .. L
+        end
+
+        if filetype ~= '' then
+          parts[#parts + 1] = '%#' .. fileinfo_edge .. '#' .. L
+          parts[#parts + 1] = '%#MiniStatuslineFileinfo# ' .. filetype .. ' '
+          parts[#parts + 1] = '%#' .. fileinfo_edge .. 'R#' .. L
+        end
+
+        parts[#parts + 1] = '%#' .. mode_edge .. '#' .. L
+        parts[#parts + 1] = '%#' .. mode_hl .. '# ' .. progress .. ' '
+
+        return table.concat(parts)
+      end,
+    },
+  })
+end)
+
+now(function()
+  local tab_fill_bg = 0x011628
+  local tab_inactive_bg = 0x1a2b3c
+  local tab_inactive_fg = 0x627E97
+  local tab_active_bg = 0x275378
+  local tab_active_fg = 0xCBE0F0
+
+  vim.api.nvim_set_hl(0, 'TabActive', { fg = tab_active_fg, bg = tab_active_bg, bold = true })
+  vim.api.nvim_set_hl(0, 'TabInactive', { fg = tab_inactive_fg, bg = tab_inactive_bg })
+  vim.api.nvim_set_hl(0, 'TabFill', {})
+
+  local SLANT_L = '\u{1fb5b}'
+
+  local function tab_sep_hl(name, fg, bg)
+    vim.api.nvim_set_hl(0, name, { fg = fg, bg = bg })
+    return '%#' .. name .. '#' .. SLANT_L
+  end
+
+  function _G.custom_tabline()
+    local bufs = {}
+    for _, b in ipairs(vim.api.nvim_list_bufs()) do
+      if vim.bo[b].buflisted and vim.bo[b].buftype == '' then
+        bufs[#bufs + 1] = b
+      end
+    end
+
+    local cur = vim.api.nvim_get_current_buf()
+    local parts = {}
+
+    for i, b in ipairs(bufs) do
+      local name = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(b), ':t')
+      if name == '' then name = '[No Name]' end
+      local modified = vim.bo[b].modified and ' +' or ''
+      local is_active = (b == cur)
+      local cur_bg = is_active and tab_active_bg or tab_inactive_bg
+      local tab_hl = is_active and 'TabActive' or 'TabInactive'
+
+      parts[#parts + 1] = '%#' .. tab_hl .. '# ' .. name .. modified .. ' '
+
+      local is_last = (i == #bufs)
+      local sep_bg = is_last and 'NONE' or tab_fill_bg
+
+      parts[#parts + 1] = tab_sep_hl('TabSep_' .. i .. 'a', cur_bg, sep_bg)
+
+      if not is_last then
+        local next_active = (bufs[i + 1] == cur)
+        local next_bg = next_active and tab_active_bg or tab_inactive_bg
+        parts[#parts + 1] = tab_sep_hl('TabSep_' .. i .. 'b', tab_fill_bg, next_bg)
+      end
+    end
+
+    parts[#parts + 1] = '%#TabFill#'
+    return table.concat(parts)
+  end
+
+  vim.o.tabline = '%!v:lua.custom_tabline()'
+  vim.o.showtabline = 2
+end)
 
 -- #### Immediate if args (now_if_args) ####
 
@@ -48,7 +235,29 @@ now_if_args(function()
 end)
 
 now_if_args(function()
-  require('mini.files').setup({ windows = { preview = true } })
+  require('mini.files').setup({
+    mappings = {
+      go_in_plus = '<CR>',
+    },
+    windows = {
+      preview = true,
+      width_preview = 40,
+    },
+  })
+
+  local function files_open_split(direction)
+    local entry = MiniFiles.get_fs_entry()
+    if entry and entry.fs_type == 'file' then
+      MiniFiles.close()
+      vim.cmd(direction .. ' ' .. vim.fn.fnameescape(entry.path))
+    end
+  end
+
+  Config.new_autocmd('User', 'MiniFilesBufferCreate', function(args)
+    local buf = args.data.buf_id
+    vim.keymap.set('n', '<C-x>', function() files_open_split('split') end, { buffer = buf, desc = 'Open in horizontal split' })
+    vim.keymap.set('n', '<C-v>', function() files_open_split('vsplit') end, { buffer = buf, desc = 'Open in vertical split' })
+  end, 'MiniFiles split keymaps')
 
   Config.new_autocmd('User', 'MiniFilesExplorerOpen', function()
     MiniFiles.set_bookmark('c', vim.fn.stdpath('config'), { desc = 'Config' })
@@ -128,7 +337,7 @@ later(function()
   })
 end)
 
-later(function() require('mini.indentscope').setup() end)
+later(function() require('mini.indentscope').setup({ symbol = '┊' }) end)
 
 later(function()
   require('mini.keymap').setup()

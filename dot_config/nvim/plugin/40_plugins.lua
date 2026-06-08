@@ -11,7 +11,7 @@ now_if_args(function()
   })
 
   local ensure_languages = {
-    'bash', 'c', 'go', 'json', 'lua', 'markdown', 'markdown_inline',
+    'bash', 'c', 'dockerfile', 'go', 'gitignore', 'json', 'lua', 'markdown', 'markdown_inline',
     'python', 'rust', 'toml', 'yaml', 'vim', 'vimdoc', 'query', 'diff',
   }
   local isnt_installed = function(lang)
@@ -19,6 +19,8 @@ now_if_args(function()
   end
   local to_install = vim.tbl_filter(isnt_installed, ensure_languages)
   if #to_install > 0 then require('nvim-treesitter').install(to_install) end
+
+  vim.treesitter.language.register('bash', 'zsh')
 
   local filetypes = vim.iter(ensure_languages):map(vim.treesitter.language.get_filetypes):flatten():totable()
   Config.new_autocmd('FileType', filetypes, function(ev)
@@ -65,6 +67,8 @@ later(function()
 
   telescope.setup({
     defaults = {
+      layout_strategy = 'vertical',
+      layout_config = { vertical = { preview_height = 0.4 } },
       path_display = { 'smart' },
       mappings = {
         i = {

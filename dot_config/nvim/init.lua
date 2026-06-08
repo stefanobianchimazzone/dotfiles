@@ -1,3 +1,5 @@
+vim.loader.enable()
+
 vim.pack.add({ "https://github.com/nvim-mini/mini.nvim" })
 
 _G.Config = {}

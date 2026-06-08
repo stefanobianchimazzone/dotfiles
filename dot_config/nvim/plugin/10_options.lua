@@ -1,3 +1,5 @@
+vim.g.loaded_python3_provider = 0
+
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
@@ -6,6 +8,7 @@ vim.o.number = true
 vim.o.relativenumber = true
 vim.o.cursorline = true
 vim.o.wrap = true
+vim.o.linebreak = true
 vim.o.signcolumn = 'yes'
 vim.o.splitright = true
 vim.o.splitbelow = true
@@ -38,9 +41,14 @@ vim.o.completeopt = 'menuone,noselect,fuzzy'
 -- Diagnostics
 Config.later(function()
   vim.diagnostic.config({
-    signs = { priority = 9999, severity = { min = 'WARN' } },
-    underline = true,
-    virtual_text = { current_line = true, severity = { min = 'ERROR' } },
-    update_in_insert = false,
+    signs = {
+      text = {
+        [vim.diagnostic.severity.ERROR] = ' ',
+        [vim.diagnostic.severity.WARN] = ' ',
+        [vim.diagnostic.severity.HINT] = '󰠠 ',
+        [vim.diagnostic.severity.INFO] = ' ',
+      },
+    },
+    float = { border = 'rounded' },
   })
 end)
