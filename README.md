@@ -1,78 +1,58 @@
-# Dotfiles & Setup
+# Dotfiles
 
-Install brew:
+Managed with [chezmoi](https://www.chezmoi.io/). Supports macOS and Arch Linux.
+
+## Quick Start
 
 ```sh
-$ /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-$ echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile
-$ source ~/.zprofile
+chezmoi init https://github.com/<user>/dotfiles.git
+chezmoi diff
+chezmoi apply
 ```
 
-Install fonts:
+## Prerequisites
+
+### macOS
 
 ```sh
-$ brew install font-meslo-lg-nerd-font
-```
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile
+source ~/.zprofile
 
-Install Ghostty:
-
-```sh
+brew install chezmoi neovim ripgrep node tmux zellij font-meslo-lg-nerd-font
 brew install --cask ghostty
-```
-
-Install Neovim:
-
-```sh
-$ brew install neovim
-```
-
-Install ripgrep:
-
-```sh
-$ brew install ripgrep
-```
-
-Install Node:
-
-```sh
-$ brew install node
-```
-
-Install Atuin:
-
-```sh
 curl --proto '=https' --tlsv1.2 -LsSf https://setup.atuin.sh | sh
 ```
 
-Install Zellij:
+### Arch Linux
 
 ```sh
-$ brew install zellij
+pacman -S chezmoi neovim ripgrep nodejs tmux zellij ttf-meslo-nerd ghostty atuin
 ```
 
-Install tmux:
+### TPM (tmux plugin manager)
 
 ```sh
-$ brew install tmux
+git clone https://github.com/tmux-plugins/tpm ~/.config/tmux/plugins/tpm
 ```
 
-Install [TPM](https://github.com/tmux-plugins/tpm) (tmux plugin manager):
+After first tmux launch, press `Ctrl+s I` to install plugins.
+
+## Usage
 
 ```sh
-$ git clone https://github.com/tmux-plugins/tpm ~/.config/tmux/plugins/tpm
+chezmoi edit ~/.config/tmux/tmux.conf   # edit source, apply on save
+chezmoi apply                            # apply all changes
+chezmoi update                           # pull remote + apply (secondary machine)
 ```
 
-Copy the config files from this repo into the proper directories:
+## Structure
 
-```sh
-# Ghostty config files
-$ cp -r ghostty ~/.config/
-# Neovim config files
-$ cp -r nvim ~/.config/
-# Atuin config files
-$ cp -r atuin ~/config/
-# Zellij config files
-$ cp -r zellij ~/config/
-# tmux config files
-$ cp -r tmux ~/.config/
+```
+dot_config/          → ~/.config/
+  atuin/             static
+  ghostty/           config.tmpl (macOS titlebar conditional)
+  nvim/              static
+  tmux/              tmux.conf.tmpl (clipboard: pbcopy vs wl-copy)
+  zellij/            static
 ```

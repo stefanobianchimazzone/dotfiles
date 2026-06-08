@@ -18,7 +18,11 @@ set -s set-clipboard on
 setw -g mode-keys vi
 bind-key -T copy-mode-vi v send -X begin-selection
 bind-key -T copy-mode-vi V send -X select-line
+{{- if eq .chezmoi.os "darwin" }}
+bind-key -T copy-mode-vi y send -X copy-pipe-and-cancel 'pbcopy'
+{{- else }}
 bind-key -T copy-mode-vi y send -X copy-pipe-and-cancel 'wl-copy'
+{{- end }}
 bind-key -T copy-mode-vi 'C-v' send -X begin-selection \; send -X rectangle-toggle
 
 # Start windows and panes at 1, not 0

@@ -1,0 +1,39 @@
+auto-update = check
+
+# Config for OLED UW monitor
+font-family = MonaspiceKr Nerd Font Mono
+font-size = 12
+font-style = Medium
+font-style-bold = Bold
+font-style-italic = Medium Italic
+font-style-bold-italic = Bold Italic
+font-thicken = true
+font-thicken-strength = 255
+
+cursor-style = block
+cursor-style-blink = true
+custom-shader = shaders/cursor_warp.glsl
+shell-integration-features = no-cursor
+
+theme = TokyoNight
+background = #000000
+background-opacity = 0.70
+background-blur = true
+{{- if eq .chezmoi.os "darwin" }}
+macos-titlebar-style = hidden
+{{- end }}
+window-decoration = true
+window-padding-x = 10
+window-padding-y = 10
+window-padding-balance = true
+
+# Allow OSC52 for Copy&Paste over SSH
+clipboard-read = allow
+clipboard-write = allow
+
+# Custom keybindings
+keybind = global:ctrl+escape=toggle_quick_terminal
+keybind = shift+enter=text:\n
+keybind = all:ctrl+shift+0=reset_font_size
+keybind = ctrl+shift+c=copy_to_clipboard
+keybind = ctrl+shift+v=paste_from_clipboard
