@@ -37,6 +37,48 @@ now_if_args(function()
       vim.bo[ev.buf].indentexpr = "v:lua.require('nvim-treesitter').indentexpr()"
     end
   end, 'Enable treesitter with folding and indentation')
+
+  -- Incremental selection via native treesitter node selection
+  local function get_node_range(node)
+    local sr, sc, er, ec = node:range()
+    return sr, sc, er, ec
+  end
+
+  local selection_node = nil
+
+  vim.keymap.set('n', '<C-space>', function()
+    local node = vim.treesitter.get_node()
+    if not node then return end
+    selection_node = node
+    local sr, sc, er, ec = get_node_range(node)
+    vim.api.nvim_win_set_cursor(0, { sr + 1, sc })
+    vim.cmd('normal! v')
+    vim.api.nvim_win_set_cursor(0, { er + 1, ec - 1 })
+  end, { desc = 'Start node selection' })
+
+  vim.keymap.set('x', '<C-space>', function()
+    if not selection_node then return end
+    local parent = selection_node:parent()
+    if not parent then return end
+    selection_node = parent
+    local sr, sc, er, ec = get_node_range(parent)
+    vim.cmd('normal! \027')
+    vim.api.nvim_win_set_cursor(0, { sr + 1, sc })
+    vim.cmd('normal! v')
+    vim.api.nvim_win_set_cursor(0, { er + 1, ec - 1 })
+  end, { desc = 'Expand to parent node' })
+
+  vim.keymap.set('x', '<BS>', function()
+    if not selection_node then return end
+    local child = selection_node:child(0)
+    if not child then return end
+    selection_node = child
+    local sr, sc, er, ec = get_node_range(child)
+    vim.cmd('normal! \027')
+    vim.api.nvim_win_set_cursor(0, { sr + 1, sc })
+    vim.cmd('normal! v')
+    vim.api.nvim_win_set_cursor(0, { er + 1, ec - 1 })
+  end, { desc = 'Shrink to child node' })
 end)
 
 -- Telescope ==================================================================
