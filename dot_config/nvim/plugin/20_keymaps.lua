@@ -25,7 +25,7 @@ map('n', '<leader>tf', '<Cmd>tabnew %<CR>', { desc = 'Open buffer in new tab' })
 -- #### File explorer (MiniFiles) ####
 
 map('n', '<leader>ed', function() MiniFiles.open(vim.uv.cwd()) end, { desc = 'Open file explorer (cwd)' })
-map('n', '<leader>ef', function() MiniFiles.open(vim.api.nvim_buf_get_name(0)) end, { desc = 'Open file explorer (current file)' })
+map('n', '<leader>ee', function() MiniFiles.open(vim.api.nvim_buf_get_name(0)) end, { desc = 'Open file explorer (current file)' })
 
 -- #### Fuzzy find (Telescope) ####
 
