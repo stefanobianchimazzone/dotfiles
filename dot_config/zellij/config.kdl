@@ -269,7 +269,7 @@ web_client {
 // Default: default
 // 
 // theme "dracula"
-theme "tokyo-night"
+theme "tokyo-night-storm"
  
 // Choose the base input mode of zellij.
 // Default: normal
@@ -352,8 +352,8 @@ default_mode "locked"
 // copy_command "wl-copy"                    // wayland
 // copy_command "pbcopy"                     // osx
 //
-copy_command "wl-copy"
- 
+// copy_command "pbcopy"
+
 // Choose the destination for copied text
 // Allows using the primary selection buffer (on x11/wayland) instead of the system clipboard.
 // Does not apply when using copy_command.
