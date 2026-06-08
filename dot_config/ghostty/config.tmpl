@@ -1,12 +1,16 @@
 auto-update = check
 
-# Config for OLED UW monitor
+{{- if eq .chezmoi.os "darwin" }}
+font-family = MesloLGM Nerd Font Mono
+font-size = 15
+{{- else }}
 font-family = MonaspiceKr Nerd Font Mono
 font-size = 12
 font-style = Medium
 font-style-bold = Bold
 font-style-italic = Medium Italic
 font-style-bold-italic = Bold Italic
+{{- end }}
 font-thicken = true
 font-thicken-strength = 255
 
@@ -15,12 +19,15 @@ cursor-style-blink = true
 custom-shader = shaders/cursor_warp.glsl
 shell-integration-features = no-cursor
 
-theme = TokyoNight
+theme = tokyonight
 background = #000000
+{{- if eq .chezmoi.os "darwin" }}
+background-opacity = 0.85
+background-blur-radius = 55
+macos-titlebar-style = hidden
+{{- else }}
 background-opacity = 0.70
 background-blur = true
-{{- if eq .chezmoi.os "darwin" }}
-macos-titlebar-style = hidden
 {{- end }}
 window-decoration = true
 window-padding-x = 10
