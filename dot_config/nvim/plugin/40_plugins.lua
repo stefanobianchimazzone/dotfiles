@@ -1,6 +1,8 @@
 local add = vim.pack.add
 local now_if_args, later = Config.now_if_args, Config.later
 
+vim.api.nvim_create_user_command('PackUpdate', function() vim.pack.update() end, {})
+
 -- Tree-sitter ================================================================
 now_if_args(function()
   local ts_update = function() vim.cmd('TSUpdate') end
@@ -35,19 +37,6 @@ now_if_args(function()
       vim.bo[ev.buf].indentexpr = "v:lua.require('nvim-treesitter').indentexpr()"
     end
   end, 'Enable treesitter with folding and indentation')
-
-  -- Incremental selection
-  require('nvim-treesitter.configs').setup({
-    incremental_selection = {
-      enable = true,
-      keymaps = {
-        init_selection = '<C-space>',
-        node_incremental = '<C-space>',
-        scope_incremental = false,
-        node_decremental = '<bs>',
-      },
-    },
-  })
 end)
 
 -- Telescope ==================================================================
