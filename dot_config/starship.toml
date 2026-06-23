@@ -1,0 +1,47 @@
+add_newline = true
+
+format = """
+$directory\
+$git_branch\
+$git_status\
+$cmd_duration\
+$python\
+$aws\
+$status\
+$line_break\
+$character"""
+
+[directory]
+truncation_length = 3
+style = "bold cyan"
+
+[git_branch]
+style = "bold purple"
+
+[git_status]
+style = "bold red"
+
+[status]
+disabled = false
+format = "[$status]($style) "
+
+[cmd_duration]
+min_time = 2_000
+style = "bold yellow"
+
+[python]
+style = "bold green"
+
+[aws]
+format = '(on [$symbol$profile ]($style))'
+style = "bold 208"
+
+[time]
+disabled = true
+
+[character]
+success_symbol = "[❯](bold green)"
+error_symbol = "[❯](bold red)"
+
+[profiles]
+transient = "$character"
