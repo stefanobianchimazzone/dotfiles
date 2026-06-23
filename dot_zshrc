@@ -109,7 +109,7 @@ autoload -Uz add-zle-hook-widget
 function transient-prompt() {
     local saved_prompt="$PROMPT"
     local saved_rprompt="$RPROMPT"
-    PROMPT='%F{242}%*%f %(?:%F{green}❯%f :%F{red}❯%f )'
+    PROMPT='%F{242}%D{%H:%M:%S}%f %(?:%F{green}❯%f :%F{red}❯%f )'
     RPROMPT=""
     zle .reset-prompt
     PROMPT="$saved_prompt"
