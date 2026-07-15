@@ -117,3 +117,7 @@ set-environment -g TMUX_PLUGIN_MANAGER_PATH '~/.config/tmux/plugins/'
 
 # Initialize TMUX plugin manager (keep this line at the very bottom of tmux.conf)
 run '~/.config/tmux/plugins/tpm/tpm'
+
+# Override catppuccin message style: fill covers full status line (tmux 3.7+)
+set -gF message-style "fg=#{@thm_teal},bg=#{@thm_bg},fill=#{@thm_bg},align=left"
+set -gF message-command-style "fg=#{@thm_teal},bg=#{@thm_bg},fill=#{@thm_bg},align=left"
