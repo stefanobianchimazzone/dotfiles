@@ -40,12 +40,18 @@ bind n new-window
 bind-key c command-prompt -I "#W" "rename-window '%%'"
 bind -n M-\, previous-window
 bind -n M-\. next-window
+# Move current window left/right and keep following it (like Zellij move-tab)
+bind -n M-w swap-window -t -1 \; select-window -t -1
+bind -n M-e swap-window -t +1 \; select-window -t +1
 # Fullscreen chooser, then swap current window with the selected one
 bind S choose-tree -Zw "swap-window -t '%%'"
 
 # Pane bindings
 bind v split-window -h -c "#{pane_current_path}"
 bind s split-window -v -c "#{pane_current_path}"
+
+# Floating popup: ccmux session picker (prefix + g)
+bind g display-popup -E -w 90% -h 85% -T " ccmux " -d "#{pane_current_path}" "ccmux"
 
 # Increase history limit
 set -g history-file ~/.tmux-history
@@ -75,7 +81,7 @@ set -ga status-left "#[bg=default,fg=#{@thm_maroon}]  #{pane_current_command}
 set -ga status-left "#[bg=default,fg=#{@thm_overlay_0},none]│"
 set -ga status-left "#[bg=default,fg=#{@thm_blue}]  #{=/-32/...:#{s|$USER|~|:#{b:pane_current_path}}} "
 set -ga status-left "#[bg=default,fg=#{@thm_overlay_0},none]#{?window_zoomed_flag,│,}"
-set -ga status-left "#[bf=default,fg=#{@thm_yellow}]#{?window_zoomed_flag,  zoom ,}"
+set -ga status-left "#[bg=default,fg=#{@thm_yellow}]#{?window_zoomed_flag,  zoom ,}"
 
 # status right look and feel
 set -g status-right-length 100
@@ -110,8 +116,10 @@ set -g window-status-style "bg=default,fg=#{@thm_lavender}"
 set -g window-status-activity-style "bg=#{@thm_red},fg=default"
 set -g window-status-bell-style "bg=#{@thm_red},fg=default,bold"
 set -gF window-status-separator "#[bg=default,fg=#{@thm_overlay_0}]│"
+# Active tab: green label on transparent bg — no background rectangle, so it
+# sits cleanly next to the pill-shaped inactive/state tabs.
 set -g window-status-current-format " #I#{?#{!=:#{window_name},Window},: #W,} "
-set -g window-status-current-style "bg=#{@thm_bg},fg=#{@thm_green},bold"
+set -g window-status-current-style "bg=default,fg=#{@thm_green},bold"
 
 set-environment -g TMUX_PLUGIN_MANAGER_PATH '~/.config/tmux/plugins/'
 
