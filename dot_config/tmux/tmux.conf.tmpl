@@ -129,3 +129,12 @@ run '~/.config/tmux/plugins/tpm/tpm'
 # Override catppuccin message style: fill covers full status line (tmux 3.7+)
 set -gF message-style "fg=#{@thm_teal},bg=#{@thm_bg},fill=#{@thm_bg},align=left"
 set -gF message-command-style "fg=#{@thm_teal},bg=#{@thm_bg},fill=#{@thm_bg},align=left"
+
+# ── Claude Code status pills ──────────────────────────────────────────────
+# Repaint every window tab from ccmux session state on each status refresh.
+# The renderer reads ccmux truth and paints one worst-of pill per window, so
+# hookless transitions (Esc-dismissed prompts, external kills) self-heal here.
+# Appended after tpm so the plugin can't clobber it; output is discarded (the
+# `; true` keeps #() from ever printing into the bar).
+set -g status-interval 2
+set -ga status-right "#(~/.claude/hooks/tmux-pills-render.sh >/dev/null 2>&1; true)"

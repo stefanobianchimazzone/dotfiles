@@ -1,13 +1,14 @@
 {
+  "model": "opus",
   "hooks": {
     "Stop": [
       {
         "hooks": [
           {
             "type": "command",
-            "command": "{{ .chezmoi.homeDir }}/.claude/hooks/tmux-state.sh",
+            "command": "{{ .chezmoi.homeDir }}/.claude/hooks/tmux-pills-hook.sh",
             "args": [
-              "idle"
+              "clear-error"
             ],
             "timeout": 5
           }
@@ -19,23 +20,9 @@
         "hooks": [
           {
             "type": "command",
-            "command": "{{ .chezmoi.homeDir }}/.claude/hooks/tmux-state.sh",
+            "command": "{{ .chezmoi.homeDir }}/.claude/hooks/tmux-pills-hook.sh",
             "args": [
-              "error"
-            ],
-            "timeout": 5
-          }
-        ]
-      }
-    ],
-    "PermissionRequest": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "{{ .chezmoi.homeDir }}/.claude/hooks/tmux-state.sh",
-            "args": [
-              "attention"
+              "set-error"
             ],
             "timeout": 5
           }
@@ -47,37 +34,23 @@
         "hooks": [
           {
             "type": "command",
-            "command": "{{ .chezmoi.homeDir }}/.claude/hooks/tmux-state.sh",
+            "command": "{{ .chezmoi.homeDir }}/.claude/hooks/tmux-pills-hook.sh",
             "args": [
-              "reset"
+              "clear-error"
             ],
             "timeout": 5
           }
         ]
       }
     ],
-    "PreToolUse": [
+    "PostToolUse": [
       {
         "hooks": [
           {
             "type": "command",
-            "command": "{{ .chezmoi.homeDir }}/.claude/hooks/tmux-state.sh",
+            "command": "{{ .chezmoi.homeDir }}/.claude/hooks/tmux-pills-hook.sh",
             "args": [
-              "reset"
-            ],
-            "timeout": 5
-          }
-        ]
-      }
-    ],
-    "PostToolBatch": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "{{ .chezmoi.homeDir }}/.claude/hooks/tmux-state.sh",
-            "args": [
-              "reset"
+              "render"
             ],
             "timeout": 5
           }
@@ -89,9 +62,65 @@
         "hooks": [
           {
             "type": "command",
-            "command": "{{ .chezmoi.homeDir }}/.claude/hooks/tmux-state.sh",
+            "command": "{{ .chezmoi.homeDir }}/.claude/hooks/tmux-pills-hook.sh",
             "args": [
-              "reset"
+              "render"
+            ],
+            "timeout": 5
+          }
+        ]
+      },
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "{{ .chezmoi.homeDir }}/.claude/hooks/ccmux-session-end.sh"
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "{{ .chezmoi.homeDir }}/.claude/hooks/ccmux-session-start.sh"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "{{ .chezmoi.homeDir }}/.claude/hooks/tmux-pills-hook.sh",
+            "args": [
+              "render"
+            ],
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "matcher": "idle_prompt|permission_prompt",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "{{ .chezmoi.homeDir }}/.claude/hooks/ccmux-state-notify.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "idle_prompt|permission_prompt",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "{{ .chezmoi.homeDir }}/.claude/hooks/tmux-pills-hook.sh",
+            "args": [
+              "render"
             ],
             "timeout": 5
           }
@@ -102,5 +131,6 @@
   "statusLine": {
     "type": "command",
     "command": "~/.claude/statusline.sh"
-  }
+  },
+  "effortLevel": "high"
 }
